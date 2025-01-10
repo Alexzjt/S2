@@ -116,6 +116,25 @@ pnpm site:preview
 
 <img alt="preview" height="600" src="https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*OmeaT5vR0a8AAAAAAAAAAAAADmJ7AQ/original" />
 
+如果是新增图表示例，需要在对应目录下的 `meta.json` 添加相应的配置信息，**其中 "screenshot" 是示例的截图，不需要填写**，PR 合并后我们会进行上传。
+
+```diff
+{
+  "demos": [
+    {
+      "filename": "filename.ts",
+      "title": {
+        "zh": "中文描述",
+        "en": "English description"
+      },
+      "screenshot": "",
+      "new": true
+    }
+  ]
+}
+
+```
+
 ## 📦 版本
 
 <embed src="@/docs/common/packages.zh.md"></embed>
