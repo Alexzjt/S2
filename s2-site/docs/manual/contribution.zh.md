@@ -121,15 +121,15 @@ pnpm site:preview
 ```diff
 {
   "demos": [
-    {
-      "filename": "filename.ts",
-      "title": {
-        "zh": "中文描述",
-        "en": "English description"
-      },
-      "screenshot": "",
-      "new": true
-    }
++   {
++     "filename": "filename.ts",
++     "title": {
++       "zh": "中文描述",
++       "en": "English description"
++     },
++     "screenshot": "",
++     "new": true
++   }
   ]
 }
 
