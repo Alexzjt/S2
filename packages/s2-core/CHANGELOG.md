@@ -1,3 +1,11 @@
+# [@antv/s2-v2.1.9](https://github.com/antvis/S2/compare/@antv/s2-v2.1.8...@antv/s2-v2.1.9) (2025-01-17)
+
+
+### Bug Fixes
+
+* 修复明细表空数据占位符背景穿透的问题 close [#3077](https://github.com/antvis/S2/issues/3077) ([#3079](https://github.com/antvis/S2/issues/3079)) ([4d2f941](https://github.com/antvis/S2/commit/4d2f941814155fd68bf44a6778ac65730ff884e1))
+* 修复组件层更新后 G 的 Group 图层累加的问题 ([#3081](https://github.com/antvis/S2/issues/3081)) ([c290b08](https://github.com/antvis/S2/commit/c290b081f1df99a79608d4533ad95eb326eaa0be))
+
 # [@antv/s2-v2.1.8](https://github.com/antvis/S2/compare/@antv/s2-v2.1.7...@antv/s2-v2.1.8) (2025-01-03)
 
 
