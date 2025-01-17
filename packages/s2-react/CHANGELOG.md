@@ -1,3 +1,10 @@
+# [@antv/s2-react-v2.1.7](https://github.com/antvis/S2/compare/@antv/s2-react-v2.1.6...@antv/s2-react-v2.1.7) (2025-01-17)
+
+
+### Bug Fixes
+
+* 修复默认配置对 ChartSheet 不生效 ([#3075](https://github.com/antvis/S2/issues/3075)) ([09a1f06](https://github.com/antvis/S2/commit/09a1f06f9d954a7165c37914bf8cc7d0f3505543))
+
 # [@antv/s2-react-v2.1.6](https://github.com/antvis/S2/compare/@antv/s2-react-v2.1.5...@antv/s2-react-v2.1.6) (2025-01-03)
 
 
