@@ -18,11 +18,30 @@ S2 会在复制的时候往剪贴板写入两种类型的元数据
 粘贴的时候，取决于`接收方选择什么类型的数据`，对于富文本一般来说接收的是 `text/html`, 对于 Excel 之类的就是 `text/plain`, 即带制表符 `\t` 的纯文本，支持自定义修改。
 :::
 
-内置是三个 API, 详见 [下方文档](#api)
+内置三个 API, 详见 [下方文档](#api)
 
 - `asyncGetAllData`
 - `asyncGetAllPlainData`
 - `asyncGetAllHtmlData`
+
+```ts {10-13}
+ const s2DataConfig = {
+  fields: {
+    rows: ['province', 'city'],
+    columns: ['type', 'sub_type'],
+    values: ['number'],
+  },
+  meta: [
+    {
+      field: 'number',
+      name: '数量',
+      formatter: (value, record, meta) => {
+        return `${value / 100} %`
+      }
+    },
+  ]
+}
+```
 
 #### 1.1 在 `@antv/s2` 中使用
 
@@ -66,11 +85,24 @@ copyToClipboard(data)
 
 ##### 1.2.1 原始数据全量复制
 
-<img alt="originFullCopy" src="https://gw.alipayobjects.com/mdn/rms_56cbb2/afts/img/A*pfSsTrvuJ0UAAAAAAAAAAAAAARQnAQ" width="1000" />
+<img alt="originFullCopy" src="https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*lh52Q69eTSwAAAAAAAAAAAAAemJ7AQ/original" width="1000" />
+
+对应 `@antv/s2` 工具方法：
+
+```ts {4-7}
+const data = await asyncGetAllData({
+  sheetInstance: s2,
+  split: '\t',
+  formatOptions: {
+    formatHeader: false,
+    formatData: false
+  },
+});
+```
 
 ##### 1.2.2 格式化数据全量复制
 
-如果配置了 [`S2DataConfig.meta`](/api/general/s2-data-config#meta) 对数据有 [格式化处理](/manual/basic/formatter), 那么可以开启 `withFormat`, 这样复制时会拿到格式化之后的数据。
+如果配置了 [`S2DataConfig.meta`](/api/general/s2-data-config#meta) 对数据有 [格式化处理](/manual/basic/formatter), 即 `s2DataConfig.meta` 中的 `name` 和 `formatter`，那么可以开启 `withFormat`, 这样复制时会拿到格式化之后的数据。
 
 ```ts
 const s2Options = {
@@ -87,7 +119,20 @@ const s2Options = {
 }
 ```
 
-<img alt="formatFullCopy" src="https://gw.alipayobjects.com/mdn/rms_56cbb2/afts/img/A*mLSdTrAWZrwAAAAAAAAAAAAAARQnAQ" width="1000" />
+<img alt="formatFullCopy" src="https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*AGkpQLhWo0AAAAAAAAAAAAAAemJ7AQ/original" width="1000" />
+
+对应 `@antv/s2` 工具方法：
+
+```ts {4-7}
+const data = await asyncGetAllData({
+  sheetInstance: s2,
+  split: '\t',
+  formatOptions: {
+    formatHeader: true,
+    formatData: true
+  },
+});
+```
 
 ### 2. 局部复制
 
