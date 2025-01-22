@@ -483,3 +483,59 @@ class CustomColCell extends ColCell {
 推荐使用 `codesandbox`, 我们提供了各种版本的模板，方便你反馈问题。[查看所有模板](https://www.yuque.com/antv/vo4vyz/bam4vz)
 
 ## 2. 错误和警告
+
+### `@antv/s2/extends` 找不到，报 `This Dependency was not found` 错误
+
+```json
+// package.json
+{
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./lib/index.js"
+    },
+    "./extends": {
+      "import": "./esm/extends/index.js",
+      "require": "./lib/extends/index.js"
+    },
+    "./*": "./*"
+  },
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+}
+```
+
+通常来说，是你的使用的包管理器或者打包工具，不支持 `exports` 字段，识别不了 `@antv/s2/extends` 这个子模块，请参考 [#3008](https://github.com/antvis/S2/issues/3008#issuecomment-2533524990)
+
+### `Can't resolve './@antv/s2/esm/styles/variables.less'`
+
+低版本的打包工具如果不写 "~"， 即： `@import '~@antv/s2/esm/styles/variables.less'` 的话，会识别成本地模块，自动转成相对路径，而不是从 node_modules 去找，导致源码被编译成如下，导致文件找不到。
+
+```diff
+- @import '@antv/s2/esm/styles/variables.less';
++ @import './@antv/s2/esm/styles/variables.less';
+```
+
+解决方案：
+
+1. 升级下打包工具。
+2. 可以参考 https://github.com/webpack-contrib/less-loader#imports 的解决方案。
+3. less-loader 开启 javascriptEnabled, 配置别名，让 `@antv/s2` 转成 `node_modules/@antv/s2`。
+
+```ts
+ {
+    loader: 'less-loader',
+    options: {
+      lessOptions: {
+        paths: [path.resolve(__dirname, 'node_modules')],
+        javascriptEnabled: true,
+      },
+    },
+}
+
+alias: {
+  '@antv/s2': path.resolve(__dirname, 'node_modules/@antv/s2')
+}
+```
+
+请参考 [3008#issuecomment-2537747353](https://github.com/antvis/S2/issues/3008#issuecomment-2537747353) 或 [3008#issuecomment-2586200238](https://github.com/antvis/S2/issues/3008#issuecomment-2586200238) 的解决方案。
