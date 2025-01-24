@@ -1,3 +1,11 @@
+# [@antv/s2-v2.1.10](https://github.com/antvis/S2/compare/@antv/s2-v2.1.9...@antv/s2-v2.1.10) (2025-01-24)
+
+
+### Bug Fixes
+
+* 修复维值包含 '\t' 制表符时导致复制到 Excel 中数据错列的问题 ([#3085](https://github.com/antvis/S2/issues/3085)) ([339e532](https://github.com/antvis/S2/commit/339e532572654d2dffe6b4893575c41999b86f20))
+* 升级 G 版本, 修复超长文本中含有单词时换行异常 ([#3086](https://github.com/antvis/S2/issues/3086)) ([a815f1a](https://github.com/antvis/S2/commit/a815f1a12583908dbb7b1e3db2d0076a7843ae28))
+
 # [@antv/s2-v2.1.9](https://github.com/antvis/S2/compare/@antv/s2-v2.1.8...@antv/s2-v2.1.9) (2025-01-17)
 
 
