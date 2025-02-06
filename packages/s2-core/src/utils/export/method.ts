@@ -66,6 +66,30 @@ export const trimTabSeparator = (text: string) => {
   return replace(text, new RegExp(TAB_SEPARATOR, 'g'), '');
 };
 
+/**
+ * https://en.wikipedia.org/wiki/Comma-separated_values#Example
+ * 根据 CSV 规范，按以下规则处理字段内容：
+ * 若字段包含 ,、"、\n 或 \t → 用双引号包裹字段。
+ * 若字段中的双引号 → 转义为两个双引号 ""。
+ * @param field
+ */
+export const escapeCSVField = (field: SimpleData): SimpleData => {
+  if (typeof field !== 'string') {
+    return field;
+  }
+
+  // 检查是否需要转义：包含逗号、双引号或换行符
+  if (/[",\n\t]/.test(field)) {
+    // 转义双引号 -> 两个双引号
+    field = field.replace(/"/g, '""');
+
+    // 用双引号包裹字段
+    return `"${field}"`;
+  }
+
+  return field;
+};
+
 export const getHeaderMeasureFieldNames = (
   fields: string[],
   spreadsheet: SpreadSheet,
