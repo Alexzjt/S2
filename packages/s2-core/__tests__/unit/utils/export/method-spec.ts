@@ -1,8 +1,8 @@
+import { SimpleData } from '../../../../src';
 import {
   convertString,
   escapeCSVField,
   keyEqualTo,
-  trimTabSeparator,
 } from '../../../../src/utils/export/method';
 
 describe('method test', () => {
@@ -19,19 +19,8 @@ describe('method test', () => {
     expect(convertString('a\nb"c')).toBe('"a\nb\'c"');
     expect(convertString(null)).toBe(null);
   });
-
-  test('#trimTabSeparator', () => {
-    expect(trimTabSeparator('a\tb')).toBe('ab');
-    expect(trimTabSeparator('a\tb\t')).toBe('ab');
-    expect(trimTabSeparator('')).toBe('');
-    expect(trimTabSeparator('a')).toBe('a');
-    expect(trimTabSeparator('\ta')).toBe('a');
-    expect(trimTabSeparator(null as unknown as string)).toBe(null);
-    expect(trimTabSeparator(1 as unknown as string)).toBe(1);
-  });
 });
 
-type SimpleData = string | number | null | undefined;
 describe('escapeCSVField', () => {
   it('should return the same value for non-string types', () => {
     const testData: SimpleData[] = [42, null, undefined];

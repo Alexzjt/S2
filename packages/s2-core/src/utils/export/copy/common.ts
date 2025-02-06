@@ -14,7 +14,6 @@ import {
 } from '../../../common/interface/export';
 import type { Node } from '../../../facet/layout/node';
 import type { SpreadSheet } from '../../../sheet-type/spread-sheet';
-import { trimTabSeparator } from '../method';
 
 // 把 string[][] 矩阵转换成 CopyablePlain
 export const matrixPlainTextTransformer = (
@@ -218,7 +217,7 @@ export const getNodeFormatData = (leafNode: Node) => {
     const formatter = node.spreadsheet?.dataSet?.getFieldFormatter?.(
       node.field,
     );
-    const value = trimTabSeparator(formatter?.(node.value) as string);
+    const value = formatter?.(node.value) as string;
 
     line.unshift(value);
 

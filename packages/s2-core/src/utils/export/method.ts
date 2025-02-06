@@ -1,13 +1,12 @@
 /**
  * 导出和复制的公共方法，这里的方法都比较纯，参数中都不包含 spreadsheet 对象
  */
-import { flow, forEach, includes, map, replace } from 'lodash';
+import { flow, forEach, map } from 'lodash';
 import type { ColCell, RowCell } from '../../cell';
 import {
   CellType,
   NODE_ID_SEPARATOR,
   SERIES_NUMBER_FIELD,
-  TAB_SEPARATOR,
   type CellMeta,
   type DataItem,
   type SimpleData,
@@ -55,18 +54,6 @@ export function getAllLevels(interactedCells: (RowCell | ColCell)[]) {
 }
 
 /**
- * 复制/导出时会在文本的两侧中增加制表符，用于在 Excel 中展示
- * 兼容极端情况，防止维值中本身就存在制表符的情况，如：“成都市\t” => "成都市\t\t" 导致错列
- */
-export const trimTabSeparator = (text: string) => {
-  if (!includes(text, TAB_SEPARATOR)) {
-    return text;
-  }
-
-  return replace(text, new RegExp(TAB_SEPARATOR, 'g'), '');
-};
-
-/**
  * https://en.wikipedia.org/wiki/Comma-separated_values#Example
  * 根据 CSV 规范，按以下规则处理字段内容：
  * 若字段包含 ,、"、\n 或 \t → 用双引号包裹字段。
@@ -104,14 +91,10 @@ export const getHeaderMeasureFieldNames = (
     // https://github.com/antvis/S2/issues/2688
     // https://github.com/antvis/S2/pull/2829
     if (!formatHeader) {
-      return flow(
-        resolveNillString,
-        replaceEmptyFieldValue,
-        trimTabSeparator,
-      )(field);
+      return flow(resolveNillString, replaceEmptyFieldValue)(field);
     }
 
-    return trimTabSeparator(spreadsheet.dataSet.getFieldName(field));
+    return spreadsheet.dataSet.getFieldName(field);
   });
 };
 
