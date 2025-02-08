@@ -1,3 +1,11 @@
+# [@antv/s2-v2.1.11](https://github.com/antvis/S2/compare/@antv/s2-v2.1.10...@antv/s2-v2.1.11) (2025-02-08)
+
+
+### Bug Fixes
+
+* 多行文本二次渲染后少一行 ([#3089](https://github.com/antvis/S2/issues/3089)) ([f31e616](https://github.com/antvis/S2/commit/f31e6162e752e583ba4785d0682e6efa27a3558e))
+* 导出复制时处理特殊字符 ([#3093](https://github.com/antvis/S2/issues/3093)) ([dd368ab](https://github.com/antvis/S2/commit/dd368aba72a5107ff9f3db842531a83c81e96cba))
+
 # [@antv/s2-v2.1.10](https://github.com/antvis/S2/compare/@antv/s2-v2.1.9...@antv/s2-v2.1.10) (2025-01-24)
 
 
