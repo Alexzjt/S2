@@ -1,3 +1,4 @@
+import { map } from 'lodash';
 import {
   AsyncRenderThreshold,
   TAB_SEPARATOR,
@@ -14,7 +15,11 @@ import type {
 import { CopyMIMEType } from '../../../common/interface/export';
 import { Node } from '../../../facet/layout/node';
 import type { SpreadSheet } from '../../../sheet-type';
-import { getHeaderList, getHeaderMeasureFieldNames } from '../method';
+import {
+  escapeField,
+  getHeaderList,
+  getHeaderMeasureFieldNames,
+} from '../method';
 import { unifyConfig } from './common';
 
 export abstract class BaseDataCellCopy {
@@ -50,8 +55,12 @@ export abstract class BaseDataCellCopy {
     dataMatrix: SimpleData[][],
     separator: string,
   ): CopyablePlain {
+    const escapeDataMatrix: SimpleData[][] = map(dataMatrix, (row) =>
+      map(row, escapeField),
+    );
+
     return this.config.transformers[CopyMIMEType.PLAIN](
-      dataMatrix,
+      escapeDataMatrix,
       separator,
     ) as CopyablePlain;
   }

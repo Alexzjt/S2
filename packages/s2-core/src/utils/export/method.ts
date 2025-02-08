@@ -1,15 +1,13 @@
 /**
  * 导出和复制的公共方法，这里的方法都比较纯，参数中都不包含 spreadsheet 对象
  */
-import { flow, forEach, includes, map, replace } from 'lodash';
+import { flow, forEach, map } from 'lodash';
 import type { ColCell, RowCell } from '../../cell';
 import {
   CellType,
   NODE_ID_SEPARATOR,
   SERIES_NUMBER_FIELD,
-  TAB_SEPARATOR,
   type CellMeta,
-  type DataItem,
   type SimpleData,
 } from '../../common';
 import type { Node } from '../../facet/layout/node';
@@ -24,15 +22,6 @@ export function keyEqualTo(key: string, compareKey: string) {
 
   return String(key).toLowerCase() === String(compareKey).toLowerCase();
 }
-
-export const convertString = (value: DataItem) => {
-  if (/\n/.test(value as string)) {
-    // 单元格内换行 替换双引号 防止内容存在双引号 导致内容换行出错
-    return `"${(value as string).replace(/\r\n?/g, '\n').replace(/"/g, "'")}"`;
-  }
-
-  return value;
-};
 
 /**
  * 获取 intersection cell 所有的层级
@@ -55,15 +44,29 @@ export function getAllLevels(interactedCells: (RowCell | ColCell)[]) {
 }
 
 /**
- * 复制/导出时会在文本的两侧中增加制表符，用于在 Excel 中展示
- * 兼容极端情况，防止维值中本身就存在制表符的情况，如：“成都市\t” => "成都市\t\t" 导致错列
+ * https://en.wikipedia.org/wiki/Comma-separated_values#Example
+ * 根据 CSV、Excel 规范，按以下规则处理字段内容：
+ * 若字段包含 ,、"、\r、\n 或 \t → 用双引号包裹字段。
+ * 字段中的双引号 → 转义为两个双引号 ""。
+ * 为了兼容直接粘贴纯文本到Excel单元格保持换行的场景，把\n替换成\r\n。但是\r\n不做替换
+ * @param field
  */
-export const trimTabSeparator = (text: string) => {
-  if (!includes(text, TAB_SEPARATOR)) {
-    return text;
+export const escapeField = (field: SimpleData): SimpleData => {
+  if (typeof field !== 'string') {
+    return field;
   }
 
-  return replace(text, new RegExp(TAB_SEPARATOR, 'g'), '');
+  // 检查是否需要转义：包含逗号、双引号或换行符
+  if (/[",\r\n\t]/.test(field)) {
+    // 转义双引号 -> 两个双引号
+    // 为了兼容直接粘贴纯文本到Excel单元格保持换行的场景，把\n替换成\r\n。但是\r\n不做替换
+    const newField = field.replace(/"/g, '""').replace(/(?<!\r)\n/g, '\r\n');
+
+    // 用双引号包裹字段
+    return `"${newField}"`;
+  }
+
+  return field;
 };
 
 export const getHeaderMeasureFieldNames = (
@@ -80,14 +83,10 @@ export const getHeaderMeasureFieldNames = (
     // https://github.com/antvis/S2/issues/2688
     // https://github.com/antvis/S2/pull/2829
     if (!formatHeader) {
-      return flow(
-        resolveNillString,
-        replaceEmptyFieldValue,
-        trimTabSeparator,
-      )(field);
+      return flow(resolveNillString, replaceEmptyFieldValue)(field);
     }
 
-    return trimTabSeparator(spreadsheet.dataSet.getFieldName(field));
+    return spreadsheet.dataSet.getFieldName(field);
   });
 };
 

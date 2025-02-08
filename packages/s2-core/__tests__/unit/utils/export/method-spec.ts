@@ -1,8 +1,4 @@
-import {
-  convertString,
-  keyEqualTo,
-  trimTabSeparator,
-} from '../../../../src/utils/export/method';
+import { escapeField, keyEqualTo } from '../../../../src/utils/export/method';
 
 describe('method test', () => {
   test('#keyEqualTo', () => {
@@ -11,21 +7,44 @@ describe('method test', () => {
     expect(keyEqualTo('a', '')).toBeFalsy();
     expect(keyEqualTo('A', 'a')).toBeTruthy();
   });
+});
 
-  test('#convertString', () => {
-    expect(convertString('a')).toBe('a');
-    expect(convertString('a\nb')).toBe('"a\nb"');
-    expect(convertString('a\nb"c')).toBe('"a\nb\'c"');
-    expect(convertString(null)).toBe(null);
+describe('escapeField', () => {
+  it.each([42, null, undefined, 'hello', '123', 'test'])(
+    'should return the same value for non-string and normal types %s',
+    (input) => {
+      expect(escapeField(input)).toBe(input);
+    },
+  );
+
+  it('should escape double quotes by replacing with two double quotes', () => {
+    const input = 'hello "world"';
+    const expected = '"hello ""world"""';
+
+    expect(escapeField(input)).toBe(expected);
   });
 
-  test('#trimTabSeparator', () => {
-    expect(trimTabSeparator('a\tb')).toBe('ab');
-    expect(trimTabSeparator('a\tb\t')).toBe('ab');
-    expect(trimTabSeparator('')).toBe('');
-    expect(trimTabSeparator('a')).toBe('a');
-    expect(trimTabSeparator('\ta')).toBe('a');
-    expect(trimTabSeparator(null as unknown as string)).toBe(null);
-    expect(trimTabSeparator(1 as unknown as string)).toBe(1);
+  it('should wrap strings containing commas in double quotes', () => {
+    const input = 'hello,world';
+    const expected = '"hello,world"';
+
+    expect(escapeField(input)).toBe(expected);
+  });
+
+  it('should replace \n to \r in double quotes', () => {
+    const input = 'hello\nworld';
+    const inputRN = 'hello\r\nworld';
+    const expected = '"hello\r\nworld"';
+    const expectedRN = '"hello\r\nworld"';
+
+    expect(escapeField(input)).toBe(expected);
+    expect(escapeField(inputRN)).toBe(expectedRN);
+  });
+
+  it('should wrap strings containing tabs in double quotes', () => {
+    const input = 'hello\tworld';
+    const expected = '"hello\tworld"';
+
+    expect(escapeField(input)).toBe(expected);
   });
 });

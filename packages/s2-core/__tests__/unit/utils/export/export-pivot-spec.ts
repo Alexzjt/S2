@@ -683,7 +683,85 @@ describe('PivotSheet Export Test', () => {
         formatOptions,
       });
 
-      expect(result.split(TAB_SEPARATOR)).toHaveLength(81);
+      expect(result).toContain(`"测试-province\t"`);
+      expect(result).toContain(`"测试-city\t"`);
+      expect(result).toContain(`"测试-type\t"`);
+      expect(result).toContain(`"测试-sub_type\t"`);
     },
   );
+
+  // https://github.com/antvis/S2/issues/2880
+  it('should escape CSV Field', async () => {
+    const data = clone<DataItem[]>(originData);
+
+    data.unshift({
+      number: 7789,
+      province: 'ac, abs, moon',
+      city: 'Venture "Extended Edition"',
+      type: 'Venture "Extended Edition, Very Large"',
+      sub_type: 'MUST SELL!\nair, moon roof, loaded',
+    });
+
+    const s2 = new PivotSheet(
+      getContainer(),
+      assembleDataCfg({
+        data,
+        fields: {
+          valueInCols: true,
+          columns: ['province', 'city'],
+          rows: ['type', 'sub_type'],
+          values: ['number'],
+        },
+        meta: [
+          {
+            field: 'number',
+            name: '数,量',
+            formatter: (value) => {
+              return Number(value)
+                .toFixed(3)
+                .toString()
+                .replace(/(\d)(?=(\d{3})+.)/g, '$1,');
+            },
+          },
+          {
+            field: 'province',
+            name: '省份',
+            formatter: (value) => `${value},`,
+          },
+          {
+            field: 'city',
+            name: '城市',
+            formatter: (value) => `${value}\t`,
+          },
+          {
+            field: 'type',
+            name: '类别',
+            formatter: (value) => {
+              const valueString = String(value);
+
+              return `${valueString.slice(0, valueString.length / 2)}\n${valueString.slice(valueString.length / 2)}`;
+            },
+          },
+          {
+            field: 'sub_type',
+            name: '子类别',
+            formatter: (value) => `${value}"`,
+          },
+        ],
+      }),
+      assembleOptions(),
+    );
+
+    await s2.render();
+    const result = await asyncGetAllPlainData({
+      sheetInstance: s2,
+      split: CSV_SEPARATOR,
+      formatOptions: { formatHeader: true, formatData: true },
+    });
+
+    expect(result).toContain(`,"ac, abs, moon,",`);
+    expect(result).toContain(`,"7,789.000",`);
+    expect(result).toContain(`,"Venture ""Extended Edition""\t",`);
+    expect(result).toContain(`"Venture ""Extended E\r\ndition, Very Large""",`);
+  });
 });
