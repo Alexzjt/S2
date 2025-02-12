@@ -629,11 +629,15 @@ export interface LayoutResult {
 - s2.getRowLeafNodes()
 - s2.getColumnLeafNodes()
 - s2.getColumnNodes()
+- s2.interaction.getPanelGroupAllDataCells()
+- s2.interaction.getPanelGroupAllUnSelectedDataCells()
 
 + s2.facet.getRowNodes()
 + s2.facet.getRowLeafNodes()
 + s2.facet.getColLeafNodes()
 + s2.facet.getColNodes()
++ s2.facet.getDataCells()
++ s2.interaction.getUnSelectedDataCells() // 和交互相关，所以重命名后还是保留在 interaction 命名空间下
 ```
 
 具体请查看 [获取单元格数据](/manual/advanced/get-cell-data) 和 [BaseFacet](/api/basic-class/base-facet) 相关文档。
@@ -866,7 +870,7 @@ s2.interaction.selectAll()
 + s2.interaction.highlightCell(cell: S2CellType)
 ```
 
-同时支持 `animate （是否展示滚动动画` 和 `skipScrollEvent （是否触发滚动事件）` 配置。
+同时支持 `animate（是否展示滚动动画）` 和 `skipScrollEvent （是否触发滚动事件）` 配置。
 
 ```ts | pure
 s2.interaction.selectCell(cell, {

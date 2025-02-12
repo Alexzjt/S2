@@ -46,11 +46,7 @@ describe('Merge Cells Test', () => {
       conditions: [],
       dataCell: jest.fn(() => ({})),
     };
-    mockInstance.interaction = {
-      getPanelGroupAllDataCells() {
-        return mockAllVisibleCells;
-      },
-    } as unknown as RootInteraction;
+    mockInstance.interaction = {} as unknown as RootInteraction;
     mockInstance.facet = {
       cfg: {
         dataCell: jest.fn(),
