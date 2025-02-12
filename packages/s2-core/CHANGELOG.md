@@ -1,3 +1,10 @@
+# [@antv/s2-v2.1.12](https://github.com/antvis/S2/compare/@antv/s2-v2.1.11...@antv/s2-v2.1.12) (2025-02-12)
+
+
+### Bug Fixes
+
+* 修复移动端禁用外部容器滚动不生效 ([#3097](https://github.com/antvis/S2/issues/3097)) ([ba93684](https://github.com/antvis/S2/commit/ba93684ad1c3ad7b10ac95194b36e3ebaac66808))
+
 # [@antv/s2-v2.1.11](https://github.com/antvis/S2/compare/@antv/s2-v2.1.10...@antv/s2-v2.1.11) (2025-02-08)
 
 
