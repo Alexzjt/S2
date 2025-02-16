@@ -29,6 +29,7 @@ import {
   getVerticalIconPosition,
   getVerticalTextPosition,
 } from '../utils/cell/cell';
+import { drawCustomRenderer } from '../utils/cell/customRenderer';
 import {
   includeCell,
   shouldUpdateBySelectedCellsHighlight,
@@ -41,6 +42,7 @@ import {
 } from '../utils/condition/condition';
 import { drawInterval } from '../utils/g-mini-charts';
 import { updateShapeAttr } from '../utils/g-renders';
+
 import type { RawData } from './../common/interface/s2DataConfig';
 
 /**
@@ -230,6 +232,14 @@ export class DataCell extends BaseCell<ViewMeta> {
   }
 
   public drawTextShape() {
+    const renderer = this.getRenderer();
+
+    if (renderer) {
+      drawCustomRenderer(renderer, this);
+
+      return;
+    }
+
     super.drawTextShape();
 
     if (!this.isShallowRender()) {
@@ -521,5 +531,11 @@ export class DataCell extends BaseCell<ViewMeta> {
         isCustomHeight: this.meta.height !== DEFAULT_STYLE.dataCell?.height,
       })
     );
+  }
+
+  public getRenderer() {
+    return this.spreadsheet.dataCfg.meta?.find(
+      (m) => m.field === this.meta.valueField,
+    )?.renderer;
   }
 }
