@@ -9,22 +9,20 @@ interface BaseRendererConfig {
   type: 'image' | 'video' | 'html';
   /** 当渲染失败时的回退内容（文字/HTML） */
   fallback?: string;
+  /** 是否开启点击预览 */
+  clickToPreview: boolean;
 }
 
 // 图片渲染配置
 export interface ImageRendererConfig extends BaseRendererConfig {
   type: 'image';
   config?: Partial<ImageStyleProps>;
-  /** 是否开启点击预览 */
-  clickToPreview: boolean;
 }
 
 // 视频渲染配置
 export interface VideoRendererConfig extends BaseRendererConfig {
   type: 'video';
   config?: Partial<HTMLVideoElement>;
-  /** 是否开启点击预览 */
-  clickToPreview: boolean;
 }
 
 // HTML渲染配置
